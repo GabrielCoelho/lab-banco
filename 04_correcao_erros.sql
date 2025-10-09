@@ -36,7 +36,6 @@ COMMIT;
 -- ============================================================================
 -- CÓDIGO CORRIGIDO (Versão Completa com Validações)
 -- ============================================================================
--- Esta versão inclui tratamento de erros e validações robustas
 
 DELIMITER //
 
@@ -158,7 +157,7 @@ VALUES (12, 5, '2025-02-01');
 -- INSERT INTO Matriculas (id_aluno_invalido, id_turma) VALUES (1, 1);
 
 -- Se houvesse erro, usaríamos ROLLBACK:
--- ROLLBACK;
+ROLLBACK;
 
 -- Como não há erro, confirmamos:
 COMMIT;
