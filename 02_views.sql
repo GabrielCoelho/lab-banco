@@ -1,3 +1,6 @@
+-- Remove a view se já existe
+DROP VIEW IF EXISTS ListaProfessoresDepartamentos;
+
 -- Cria a view que combina dados de Professores e Departamentos
 CREATE VIEW ListaProfessoresDepartamentos AS
 SELECT

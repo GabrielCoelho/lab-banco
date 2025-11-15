@@ -1,3 +1,6 @@
+-- Remove a procedure se já existente
+DROP PROCEDURE IF EXISTS ListarAlunosCurso;
+
 -- Altera-se o delimitador de ';' para '//' brevemente afim de que os delimitadores
 -- utilizados dentro da procedure, não quebrem ela antes do fim
 DELIMITER //
