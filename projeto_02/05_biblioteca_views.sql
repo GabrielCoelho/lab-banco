@@ -160,24 +160,32 @@ SELECT
 
 -- View 5: Ranking de categorias mais emprestadas
 -- Ordenado por volume de empréstimos
+-- CORREÇÃO: Removido uso de variável @posicao e implementado ROW_NUMBER()
+-- Window function compatível com MariaDB 10.5+ e MySQL 8.0+
 
 DROP VIEW IF EXISTS vw_RankingCategoriasMaisEmprestadas;
 
 CREATE OR REPLACE VIEW vw_RankingCategoriasMaisEmprestadas AS
 SELECT
-    @posicao := @posicao + 1 AS posicao,
-    c.nome_categoria AS categoria,
-    COUNT(e.id_emprestimo) AS total_emprestimos,
-    COUNT(DISTINCT l.id_livro) AS livros_categoria,
-    ROUND(COUNT(e.id_emprestimo) / COUNT(DISTINCT l.id_livro), 2) AS media_emprestimos_por_livro
-FROM
-    Categorias c
-    INNER JOIN Livros l ON c.id_categoria = l.id_categoria
-    INNER JOIN Exemplares ex ON l.id_livro = ex.id_livro
-    INNER JOIN Emprestimos e ON ex.id_exemplar = e.id_exemplar
-    CROSS JOIN (SELECT @posicao := 0) AS pos_init
-GROUP BY
-    c.id_categoria, c.nome_categoria
+    ROW_NUMBER() OVER (ORDER BY total_emprestimos DESC) AS posicao,
+    categoria,
+    total_emprestimos,
+    livros_categoria,
+    media_emprestimos_por_livro
+FROM (
+    SELECT
+        c.nome_categoria AS categoria,
+        COUNT(e.id_emprestimo) AS total_emprestimos,
+        COUNT(DISTINCT l.id_livro) AS livros_categoria,
+        ROUND(COUNT(e.id_emprestimo) / COUNT(DISTINCT l.id_livro), 2) AS media_emprestimos_por_livro
+    FROM
+        Categorias c
+        INNER JOIN Livros l ON c.id_categoria = l.id_categoria
+        INNER JOIN Exemplares ex ON l.id_livro = ex.id_livro
+        INNER JOIN Emprestimos e ON ex.id_exemplar = e.id_exemplar
+    GROUP BY
+        c.id_categoria, c.nome_categoria
+) AS ranking
 ORDER BY
     total_emprestimos DESC;
 

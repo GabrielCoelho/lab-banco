@@ -25,7 +25,7 @@ CREATE PROCEDURE sp_RealizarEmprestimo(
     OUT p_sucesso BOOLEAN,
     OUT p_mensagem VARCHAR(200)
 )
-BEGIN
+sp_RealizarEmprestimo: BEGIN
     DECLARE v_status_usuario VARCHAR(20);
     DECLARE v_multas_pendentes INT;
     DECLARE v_emprestimos_ativos INT;
@@ -132,7 +132,7 @@ BEGIN
     SET p_sucesso = TRUE;
     SET p_mensagem = CONCAT('Empréstimo realizado com sucesso. Devolução prevista: ', v_data_prevista);
 
-END$$
+END sp_RealizarEmprestimo$$
 
 DELIMITER ;
 
@@ -152,7 +152,7 @@ CREATE PROCEDURE sp_RealizarDevolucao(
     OUT p_valor_multa DECIMAL(10,2),
     OUT p_mensagem VARCHAR(200)
 )
-BEGIN
+sp_RealizarDevolucao: BEGIN
     DECLARE v_status_emprestimo VARCHAR(20);
     DECLARE v_id_exemplar INT;
     DECLARE v_id_livro INT;
@@ -252,7 +252,7 @@ BEGIN
 
     SET p_sucesso = TRUE;
 
-END$$
+END sp_RealizarDevolucao$$
 
 DELIMITER ;
 

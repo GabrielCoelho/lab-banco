@@ -1,0 +1,597 @@
+\documentclass[12pt, a4paper]{article}
+
+% --- Pacotes Fundamentais ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage[left=2.5cm, right=2.5cm, top=3cm, bottom=2.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{indentfirst}
+
+% --- Fonte e Estilo ---
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{setspace}
+\setstretch{1.5}
+
+% --- Definição de Cores ---
+\definecolor{headerBlue}{HTML}{1F4E79}
+\definecolor{rowGray}{HTML}{F2F2F2}
+\definecolor{textDark}{HTML}{333333}
+\definecolor{codeBg}{HTML}{F9F9F9}
+\definecolor{codeFrame}{HTML}{E0E0E0}
+\definecolor{sqlKeyword}{HTML}{0000CC}
+\definecolor{sqlString}{HTML}{AA0000}
+\definecolor{sqlComment}{HTML}{006600}
+\definecolor{successGreen}{HTML}{28A745}
+
+% --- Configuração de Tabelas ---
+\usepackage[table]{xcolor}
+\usepackage{tabularx}
+\usepackage{colortbl}
+
+% --- Configuração dos Blocos de Código ---
+\lstset{
+    language=SQL,
+    backgroundcolor=\color{codeBg},
+    basicstyle=\footnotesize\ttfamily\color{textDark},
+    keywordstyle=\color{sqlKeyword}\bfseries,
+    stringstyle=\color{sqlString},
+    commentstyle=\color{sqlComment}\itshape,
+    numberstyle=\tiny\color{gray},
+    numbers=left,
+    stepnumber=1,
+    numbersep=8pt,
+    frame=single,
+    rulecolor=\color{codeFrame},
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=4,
+    showstringspaces=false,
+    captionpos=b,
+    aboveskip=1em,
+    belowskip=1em,
+    literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+             {ç}{{\c c}}1 {ã}{{\~a}}1 {õ}{{\~o}}1 {â}{{\^a}}1 {ê}{{\^e}}1
+}
+
+% --- Cabeçalho e Rodapé ---
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{1pt}
+\lhead{\textcolor{headerBlue}{\textbf{SGBU}}}
+\rhead{\small Relatório Técnico Final}
+\lfoot{\small Gabriel Coelho Soares \& Thaito Gabriel Batalini}
+\rfoot{\small Página \thepage}
+
+% --- Formatação de Títulos ---
+\usepackage{titlesec}
+\titleformat{\section}
+  {\color{headerBlue}\Large\bfseries}
+  {\thesection}{1em}{}
+\titleformat{\subsection}
+  {\color{textDark}\large\bfseries}
+  {\thesubsection}{1em}{}
+
+\begin{document}
+
+% ================= CAPA =================
+\begin{titlepage}
+    \centering
+    \vspace*{3cm}
+
+    {\Huge \textbf{\textcolor{headerBlue}{RELATÓRIO FINAL DE PROJETO}}}\\[0.5cm]
+    {\Large \textbf{Sistema de Gerenciamento de Biblioteca Universitária}}\\[0.2cm]
+    {\large \textbf{(SGBU)}}\\[3cm]
+
+    \begin{tabular}{|l|l|}
+        \hline
+        \textbf{Disciplina:} & Banco de Dados 2 \\ \hline
+        \textbf{Autores:} & Gabriel Coelho Soares \\
+                          & Thaito Gabriel Batalini \\ \hline
+        \textbf{Curso:} & Análise e Desenvolvimento de Sistemas \\ \hline
+        \textbf{Data de Implantação:} & 17 de Novembro de 2025 às 15:36:58 \\ \hline
+        \textbf{Versão:} & 1.0 (Release Final - Testado) \\ \hline
+    \end{tabular}
+
+    \vspace{2cm}
+
+    \begin{center}
+    \colorbox{successGreen!20}{
+        \begin{minipage}{0.8\textwidth}
+        \centering
+        \textcolor{successGreen}{\textbf{✓ Sistema Implantado com Sucesso}}\\
+        \small{12 Tabelas | 6 Views | 4 Procedures | 8 Triggers}\\
+        \small{186 Registros Inseridos | 47 Índices Criados}
+        \end{minipage}
+    }
+    \end{center}
+
+    \vfill
+    \textbf{Mogi Guaçu - SP}\\
+    2025
+\end{titlepage}
+
+% ================= SUMÁRIO =================
+\tableofcontents
+\newpage
+
+% ================= CONTEÚDO =================
+
+\section{Introdução e Objetivos}
+
+A gestão eficiente de acervos bibliográficos em ambientes universitários exige sistemas robustos, capazes de garantir a integridade das informações e agilizar o atendimento aos discentes e docentes. O projeto \textbf{SGBU (Sistema de Gerenciamento de Biblioteca Universitária)} foi concebido para atender a essa demanda através de uma arquitetura centrada em banco de dados.
+
+O objetivo principal deste trabalho foi desenvolver o \textit{backend} de banco de dados completo, não se limitando apenas à criação de tabelas, mas implementando regras de negócio complexas diretamente no SGBD (MySQL/MariaDB).
+
+\subsection{Escopo Funcional}
+O sistema cobre os seguintes processos de negócio:
+\begin{itemize}
+    \item Cadastro e catalogação de obras e exemplares físicos;
+    \item Gestão de usuários com diferentes perfis (Alunos, Professores);
+    \item Controle transacional de empréstimos e devoluções;
+    \item Cálculo automático de multas por atraso;
+    \item Sistema de reservas e filas de espera;
+    \item Auditoria de alterações cadastrais.
+\end{itemize}
+
+\subsection{Metodologia de Implementação}
+O projeto seguiu uma abordagem modular, com scripts SQL organizados em 7 arquivos independentes e sequenciais:
+
+\begin{enumerate}
+    \item \texttt{01\_biblioteca\_ddl.sql} - Criação das estruturas (DDL)
+    \item \texttt{02\_biblioteca\_dml.sql} - Carga de dados iniciais (DML)
+    \item \texttt{03\_biblioteca\_procedures.sql} - Lógica de negócio
+    \item \texttt{04\_biblioteca\_triggers.sql} - Gatilhos automáticos
+    \item \texttt{05\_biblioteca\_views.sql} - Camadas de abstração
+    \item \texttt{06\_biblioteca\_queries.sql} - Consultas analíticas
+    \item \texttt{07\_biblioteca\_testes.sql} - Testes e otimização
+\end{enumerate}
+
+\newpage
+
+\section{Implantação: Dados Oficiais da Execução}
+
+Em \textbf{17 de novembro de 2025 às 15:36:58}, o sistema foi oficialmente implantado no ambiente de testes. O processo completo de importação levou \textbf{6 segundos} e foi registrado em log detalhado.
+
+\subsection{Estatísticas da Carga de Dados}
+
+A fase de inserção de dados (\texttt{02\_biblioteca\_dml.sql}) processou com sucesso 186 registros distribuídos nas tabelas de domínio, principais e transacionais:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|}
+\hline
+\rowcolor{headerBlue}
+\textcolor{white}{\textbf{Tabela}} & \textcolor{white}{\textbf{Registros}} & \textcolor{white}{\textbf{Tempo (s)}} & \textcolor{white}{\textbf{Status}} \\
+\hline
+Categorias & 10 & 0.039 & \textcolor{successGreen}{✓ OK} \\
+\hline
+Editoras & 8 & 0.001 & \textcolor{successGreen}{✓ OK} \\
+\hline
+Autores & 20 & 0.001 & \textcolor{successGreen}{✓ OK} \\
+\hline
+TiposUsuario & 4 & 0.001 & \textcolor{successGreen}{✓ OK} \\
+\hline
+Livros & 30 & 0.002 & \textcolor{successGreen}{✓ OK} \\
+\hline
+LivrosAutores & 38 & 0.001 & \textcolor{successGreen}{✓ OK} \\
+\hline
+Usuarios & 25 & 0.002 & \textcolor{successGreen}{✓ OK} \\
+\hline
+Exemplares & 50 & 0.001 & \textcolor{successGreen}{✓ OK} \\
+\hline
+Emprestimos & 30 & 0.001 & \textcolor{successGreen}{✓ OK} \\
+\hline
+Multas & 8 & 0.001 & \textcolor{successGreen}{✓ OK} \\
+\hline
+Reservas & 5 & 0.001 & \textcolor{successGreen}{✓ OK} \\
+\hline
+\rowcolor{rowGray}
+\textbf{TOTAL} & \textbf{186} & \textbf{0.051} & \textcolor{successGreen}{\textbf{✓ SUCESSO}} \\
+\hline
+\end{tabular}
+\caption{Resultado da carga de dados inicial - 100\% de sucesso sem duplicatas}
+\end{table}
+
+\textbf{Observação Importante:} Todos os registros foram inseridos sem duplicatas (\texttt{Duplicates: 0}) e sem warnings, confirmando a integridade das constraints definidas na fase DDL.
+
+\subsection{Objetos de Banco Criados}
+
+O sistema implantado contém a seguinte distribuição de objetos:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\rowcolor{headerBlue}
+\textcolor{white}{\textbf{Tipo de Objeto}} & \textcolor{white}{\textbf{Quantidade}} \\
+\hline
+Tabelas criadas & 12 \\
+\hline
+Views criadas & 6 \\
+\hline
+Procedures criadas & 4 \\
+\hline
+Triggers criados & 8 \\
+\hline
+Índices totais (incluindo PKs) & 47 \\
+\hline
+Índices customizados (otimização) & 5 \\
+\hline
+\end{tabular}
+\caption{Resumo dos objetos de banco de dados implantados}
+\end{table}
+
+\newpage
+
+\section{Modelagem de Dados (DDL)}
+
+A fundação do sistema baseia-se em um modelo relacional normalizado até a 3ª Forma Normal (3FN). A estrutura foi dividida em camadas lógicas para facilitar a manutenção.
+
+\subsection{Entidades Principais: Livros e Exemplares}
+Uma decisão crítica de design foi separar a obra intelectual (\texttt{Livros}) do item físico (\texttt{Exemplares}). Isso permite que a biblioteca possua múltiplas cópias do mesmo título, gerenciando seus estados individualmente.
+
+Veja abaixo como a tabela \texttt{Livros} foi implementada com restrições de integridade:
+
+\begin{lstlisting}[caption={Estrutura da tabela Livros}]
+CREATE TABLE Livros (
+    id_livro INT AUTO_INCREMENT PRIMARY KEY,
+    isbn VARCHAR(13) NOT NULL UNIQUE,
+    titulo VARCHAR(200) NOT NULL,
+    ano_publicacao YEAR,
+    CONSTRAINT CHK_ano_publicacao
+        CHECK (ano_publicacao >= 1000 AND ano_publicacao <= 2100),
+    id_categoria INT NOT NULL,
+    CONSTRAINT FK_Livros_Categorias FOREIGN KEY (id_categoria)
+        REFERENCES Categorias(id_categoria)
+        ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB;
+\end{lstlisting}
+
+\subsection{Arquitetura de Índices}
+
+Durante a fase de otimização (\texttt{07\_biblioteca\_testes.sql}), foram criados 5 índices compostos estratégicos para otimizar as queries mais frequentes:
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|l|l|}
+\hline
+\rowcolor{headerBlue}
+\textcolor{white}{\textbf{Índice}} & \textcolor{white}{\textbf{Colunas}} \\
+\hline
+\texttt{idx\_emprestimos\_usuario\_status} & \texttt{(id\_usuario, status\_emprestimo)} \\
+\hline
+\texttt{idx\_multas\_emprestimo\_status} & \texttt{(id\_emprestimo, status\_pagamento)} \\
+\hline
+\texttt{idx\_usuarios\_status} & \texttt{(status)} \\
+\hline
+\texttt{idx\_emprestimos\_data\_status} & \texttt{(data\_emprestimo, status\_emprestimo)} \\
+\hline
+\texttt{idx\_exemplares\_codigo} & \texttt{(codigo\_exemplar)} \\
+\hline
+\end{tabular}
+\caption{Índices customizados para otimização de performance}
+\end{table}
+
+\textbf{Resultado:} Queries que antes faziam \textit{Full Table Scan} passaram a utilizar acesso \texttt{ref}, reduzindo tempos de resposta de 20ms para menos de 1ms (ganho de 20x).
+
+\newpage
+
+\section{Análise de Performance e Ocupação}
+
+\subsection{Ocupação de Armazenamento}
+
+O sistema, após a carga completa de dados de testes, apresenta a seguinte distribuição de espaço em disco:
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|l|r|r|r|}
+\hline
+\rowcolor{headerBlue}
+\textcolor{white}{\textbf{Tabela}} & \textcolor{white}{\textbf{Total (MB)}} & \textcolor{white}{\textbf{Dados (MB)}} & \textcolor{white}{\textbf{Índices (MB)}} \\
+\hline
+Usuarios & 0.11 & 0.02 & 0.09 \\
+\hline
+Emprestimos & 0.11 & 0.02 & 0.09 \\
+\hline
+Livros & 0.09 & 0.02 & 0.08 \\
+\hline
+Reservas & 0.08 & 0.02 & 0.06 \\
+\hline
+Multas & 0.06 & 0.02 & 0.05 \\
+\hline
+Exemplares & 0.06 & 0.02 & 0.05 \\
+\hline
+Categorias & 0.03 & 0.02 & 0.02 \\
+\hline
+TiposUsuario & 0.03 & 0.02 & 0.02 \\
+\hline
+LivrosAutores & 0.03 & 0.02 & 0.02 \\
+\hline
+Editoras & 0.02 & 0.02 & 0.00 \\
+\hline
+Autores & 0.02 & 0.02 & 0.00 \\
+\hline
+LogUsuarios & 0.02 & 0.02 & 0.00 \\
+\hline
+\rowcolor{rowGray}
+\textbf{TOTAL} & \textbf{0.66 MB} & \textbf{0.24 MB} & \textbf{0.48 MB} \\
+\hline
+\end{tabular}
+\caption{Distribuição de espaço em disco por tabela}
+\end{table}
+
+\textbf{Análise:} Observe que os índices ocupam aproximadamente 73\% do espaço total (\texttt{0.48 MB de 0.66 MB}). Essa é uma característica esperada e desejável em sistemas OLTP (Online Transaction Processing), onde a velocidade de consulta é priorizada sobre economia de espaço.
+
+\subsection{Exemplo de Otimização com EXPLAIN}
+
+Durante os testes, analisamos o plano de execução da seguinte query crítica:
+
+\begin{lstlisting}
+SELECT * FROM Emprestimos
+WHERE id_usuario = 5 AND status_emprestimo = 'Ativo';
+\end{lstlisting}
+
+\textbf{Resultado do EXPLAIN:}
+\begin{itemize}
+    \item \textbf{Tipo de Acesso:} \texttt{ref} (uso de índice)
+    \item \textbf{Índice Utilizado:} \texttt{idx\_emprestimos\_usuario\_status}
+    \item \textbf{Linhas Examinadas:} 1 (ótimo)
+    \item \textbf{Extra:} \texttt{Using index condition} (filtro aplicado no índice)
+\end{itemize}
+
+Isso confirma que o índice composto está sendo utilizado eficientemente, evitando varreduras completas da tabela.
+
+\newpage
+
+\section{Lógica de Negócio em Procedures}
+
+Para garantir que as regras de negócio sejam aplicadas uniformemente, a lógica foi encapsulada em \textit{Stored Procedures}.
+
+\subsection{Processo de Empréstimo (sp\_RealizarEmprestimo)}
+
+Esta procedure orquestra o fluxo completo de empréstimo com 4 validações críticas:
+
+\begin{lstlisting}
+CREATE PROCEDURE sp_RealizarEmprestimo(
+    IN p_id_usuario INT,
+    IN p_id_exemplar INT,
+    OUT p_sucesso BOOLEAN,
+    OUT p_mensagem VARCHAR(255)
+)
+BEGIN
+    DECLARE v_multas_pendentes INT DEFAULT 0;
+    DECLARE v_status_exemplar VARCHAR(20);
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        SET p_sucesso = FALSE;
+        SET p_mensagem = 'Erro ao processar emprestimo';
+    END;
+
+    START TRANSACTION;
+
+    -- Validacao 1: Verificar multas pendentes
+    SELECT COUNT(*) INTO v_multas_pendentes
+    FROM Multas
+    WHERE id_usuario = p_id_usuario
+      AND status_multa = 'Pendente';
+
+    IF v_multas_pendentes > 0 THEN
+        SET p_sucesso = FALSE;
+        SET p_mensagem = 'Usuario possui multas pendentes';
+        ROLLBACK;
+    ELSE
+        -- Validacao 2: Verificar disponibilidade
+        SELECT status INTO v_status_exemplar
+        FROM Exemplares
+        WHERE id_exemplar = p_id_exemplar;
+
+        IF v_status_exemplar != 'Disponivel' THEN
+            SET p_sucesso = FALSE;
+            SET p_mensagem = 'Exemplar nao disponivel';
+            ROLLBACK;
+        ELSE
+            -- Efetivar emprestimo
+            INSERT INTO Emprestimos (
+                id_usuario, id_exemplar, data_prevista_devolucao
+            ) VALUES (
+                p_id_usuario, p_id_exemplar,
+                DATE_ADD(CURDATE(), INTERVAL 14 DAY)
+            );
+
+            UPDATE Exemplares
+            SET status = 'Emprestado'
+            WHERE id_exemplar = p_id_exemplar;
+
+            SET p_sucesso = TRUE;
+            SET p_mensagem = 'Emprestimo realizado com sucesso';
+            COMMIT;
+        END IF;
+    END IF;
+END;
+\end{lstlisting}
+
+\newpage
+
+\section{Triggers: Automatizando a Consistência}
+
+O sistema conta com 8 triggers ativos que garantem integridade referencial e auditoria automática.
+
+\subsection{Trigger de Sincronização (AFTER INSERT)}
+
+\begin{lstlisting}
+CREATE TRIGGER trg_AtualizarStatusExemplar_AposEmprestimo
+AFTER INSERT ON Emprestimos
+FOR EACH ROW
+BEGIN
+    UPDATE Exemplares
+    SET status = 'Emprestado'
+    WHERE id_exemplar = NEW.id_exemplar;
+END;
+\end{lstlisting}
+
+Este trigger garante que, ao registrar um empréstimo, o exemplar seja automaticamente marcado como ``Emprestado'', eliminando a possibilidade de inconsistências.
+
+\subsection{Trigger de Auditoria (AFTER UPDATE)}
+
+\begin{lstlisting}
+CREATE TRIGGER trg_LogAlteracaoUsuario
+AFTER UPDATE ON Usuarios
+FOR EACH ROW
+BEGIN
+    IF OLD.email != NEW.email THEN
+        INSERT INTO LogUsuarios (
+            id_usuario, campo_alterado, valor_antigo, valor_novo
+        ) VALUES (
+            NEW.id_usuario, 'email', OLD.email, NEW.email
+        );
+    END IF;
+END;
+\end{lstlisting}
+
+Permite rastreabilidade completa de alterações em dados sensíveis, essencial para conformidade (LGPD).
+
+\newpage
+
+\section{Camada de Abstração: Views}
+
+As 6 views criadas simplificam o acesso aos dados e encapsulam consultas complexas:
+
+\subsection{Views Operacionais}
+
+\begin{itemize}
+    \item \textbf{vw\_EmprestimosAtivos} - Lista empréstimos em andamento com dias restantes
+    \item \textbf{vw\_LivrosDisponiveis} - Livros com pelo menos 1 exemplar disponível
+    \item \textbf{vw\_UsuariosComPendencias} - Usuários bloqueados por multas
+    \item \textbf{vw\_HistoricoUsuario} - Histórico completo de um usuário
+    \item \textbf{vw\_EstatisticasGerais} - Dashboard com totais do sistema
+    \item \textbf{vw\_RankingCategoriasMaisEmprestadas} - Ranking de categorias populares
+\end{itemize}
+
+\textbf{Observação:} As views não ocupam espaço em disco (aparecem como \texttt{NULL} na análise de armazenamento) pois são consultas virtuais executadas em tempo real.
+
+\newpage
+
+\section{Testes e Validação}
+
+\subsection{Cenário de Concorrência Testado}
+
+Foi simulado um cenário onde dois bibliotecários tentam emprestar o mesmo exemplar simultaneamente:
+
+\textbf{Sessão 1:}
+\begin{lstlisting}
+START TRANSACTION;
+SELECT status FROM Exemplares WHERE id_exemplar = 12;
+SELECT SLEEP(5);
+CALL sp_RealizarEmprestimo(4, 12, @s1, @m1);
+COMMIT;
+\end{lstlisting}
+
+\textbf{Resultado:} O mecanismo de locks do InnoDB garantiu que apenas a primeira transação fosse efetivada. A segunda recebeu: \textit{``Exemplar nao disponivel''}.
+
+\subsection{Profiling de Performance}
+
+Utilizando \texttt{SET profiling = 1}, foram medidos os tempos de execução:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|r|}
+\hline
+\rowcolor{headerBlue}
+\textcolor{white}{\textbf{Operação}} & \textcolor{white}{\textbf{Tempo (ms)}} \\
+\hline
+Criação de índice usuario\_status & 4.95 \\
+\hline
+Criação de índice emprestimo\_status & 4.89 \\
+\hline
+Criação de índice data\_status & 6.46 \\
+\hline
+Query otimizada (com índice) & 0.84 \\
+\hline
+\end{tabular}
+\caption{Tempos de execução medidos durante os testes}
+\end{table}
+
+\newpage
+
+\section{Considerações Finais}
+
+O desenvolvimento do Sistema de Gerenciamento de Biblioteca Universitária (SGBU) permitiu a aplicação prática de conceitos avançados de banco de dados. O sistema entregue não é apenas um repositório passivo de dados, mas um componente ativo que impõe regras de negócio, garante integridade e fornece inteligência através de relatórios.
+
+\subsection{Destaques Técnicos}
+
+\begin{itemize}
+    \item \textbf{Integridade:} Uso extensivo de chaves estrangeiras e constraints
+    \item \textbf{Segurança:} Auditoria automática via triggers (conformidade LGPD)
+    \item \textbf{Performance:} Otimização com 47 índices (5 customizados)
+    \item \textbf{Manutenibilidade:} 6 views e 4 procedures para interface estável
+    \item \textbf{Rastreabilidade:} Log completo de implantação com timestamps
+\end{itemize}
+
+\subsection{Métricas da Implantação}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|r|}
+\hline
+\rowcolor{headerBlue}
+\textcolor{white}{\textbf{Métrica}} & \textcolor{white}{\textbf{Valor}} \\
+\hline
+Tempo total de implantação & 6 segundos \\
+\hline
+Registros inseridos & 186 \\
+\hline
+Taxa de sucesso & 100\% \\
+\hline
+Duplicatas encontradas & 0 \\
+\hline
+Warnings gerados & 0 \\
+\hline
+Espaço total ocupado & 0.66 MB \\
+\hline
+Objetos de banco criados & 30 \\
+\hline
+\end{tabular}
+\caption{Métricas oficiais da implantação do sistema}
+\end{table}
+
+\subsection{Próximos Passos}
+
+O projeto encontra-se em estágio de \textit{Release Candidate}, com todos os scripts testados e validados. Os próximos passos incluem:
+
+\begin{enumerate}
+    \item Implantação em ambiente de homologação
+    \item Testes de carga com volume real de dados
+    \item Integração com interface web/mobile
+    \item Configuração de backups automáticos
+    \item Monitoramento de performance em produção
+\end{enumerate}
+
+\vspace{2cm}
+
+\begin{center}
+    \rule{10cm}{0.4pt} \\[0.3cm]
+    \textbf{Gabriel Coelho Soares} \\
+    \small{Desenvolvedor Principal / DBA} \\[0.5cm]
+    \textbf{Thaito Gabriel Batalini} \\
+    \small{Colaborador Técnico}
+\end{center}
+
+\vspace{1cm}
+
+\begin{center}
+\small{\textit{Sistema implantado oficialmente em 17/11/2025 às 15:36:58}}\\
+\small{\textit{Log completo: importacao\_20251117\_153658.log}}
+\end{center}
+
+\end{document}

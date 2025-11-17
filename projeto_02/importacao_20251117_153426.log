@@ -1,0 +1,40 @@
+[0;32m[2025-11-17 15:34:26] === Iniciando importação dos scripts SQL ===[0m
+[1;33m[2025-11-17 15:34:26] Banco de dados: biblioteca_universitaria[0m
+[1;33m[2025-11-17 15:34:26] Processando: 02_biblioteca_dml.sql[0m
+----------------------------------------
+mysql: Deprecated program name. It will be removed in a future release, use '/usr/bin/mariadb' instead
+ERROR 1062 (23000) at line 15: Duplicate entry 'Ficção Literária' for key 'nome_categoria'
+--------------
+INSERT INTO
+  Categorias (nome_categoria, descricao)
+VALUES
+  ('Ficção Literária', 'Romances e contos de ficção'),
+  (
+    'Ficção Científica',
+    'Literatura de ficção científica e fantasia'
+  ),
+  ('Romance', 'Romances contemporâneos e clássicos'),
+  (
+    'Tecnologia e Computação',
+    'Livros técnicos de programação e TI'
+  ),
+  ('Ciências Exatas', 'Matemática, física e química'),
+  (
+    'Ciências Humanas',
+    'Sociologia, filosofia e psicologia'
+  ),
+  ('História', 'História mundial e do Brasil'),
+  ('Biografia', 'Biografias e autobiografias'),
+  (
+    'Autoajuda',
+    'Desenvolvimento pessoal e profissional'
+  ),
+  (
+    'Referência',
+    'Dicionários, enciclopédias e guias'
+  )
+--------------
+
+Bye
+[0;31m[2025-11-17 15:34:27] ✗ Erro ao importar 02_biblioteca_dml.sql[0m
+[0;31m[2025-11-17 15:34:27] Verifique o log: importacao_20251117_153426.log[0m
