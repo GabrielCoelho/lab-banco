@@ -6,9 +6,8 @@
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
 \babel@aux{brazil}{}
-\@writefile{toc}{\contentsline {section}{\numberline {1}Introdução e Objetivos}{2}{section.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.1}Escopo Funcional}{2}{subsection.1.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.2}Metodologia de Implementação}{2}{subsection.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introdução e Objetivos}{3}{section.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.1}Escopo Funcional}{3}{subsection.1.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {2}Implantação: Dados Oficiais da Execução}{4}{section.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Estatísticas da Carga de Dados}{4}{subsection.2.1}\protected@file@percent }
 \@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Resultado da carga de dados inicial - 100\% de sucesso sem duplicatas}}{4}{table.1}\protected@file@percent }
@@ -30,13 +29,22 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Trigger de Auditoria (AFTER UPDATE)}{12}{subsection.6.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {7}Camada de Abstração: Views}{13}{section.7}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Views Operacionais}{13}{subsection.7.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {8}Testes e Validação}{14}{section.8}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {8.1}Cenário de Concorrência Testado}{14}{subsection.8.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {8.2}Profiling de Performance}{14}{subsection.8.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Tempos de execução medidos durante os testes}}{14}{table.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {9}Considerações Finais}{15}{section.9}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {9.1}Destaques Técnicos}{15}{subsection.9.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {9.2}Métricas da Implantação}{15}{subsection.9.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Métricas oficiais da implantação do sistema}}{15}{table.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {9.3}Próximos Passos}{15}{subsection.9.3}\protected@file@percent }
-\gdef \@abspage@last{17}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Consultas Avançadas (Outputs Reais)}{14}{section.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1}Ranking de Livros Mais Emprestados}{14}{subsection.8.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Top 5 livros mais emprestados - Query 10}}{14}{table.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2}Autores com Múltiplas Obras}{14}{subsection.8.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Autores com 2 ou mais livros no acervo - Query 4}}{14}{table.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3}Usuários Sem Empréstimos (Anti-Join)}{14}{subsection.8.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces 9 usuários cadastrados que nunca realizaram empréstimos - Query 8}}{15}{table.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {9}Testes e Validação}{16}{section.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.1}Teste 1: Bloqueio por Multas Pendentes}{16}{subsection.9.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.2}Teste 2: Exemplar Não Disponível}{16}{subsection.9.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.3}Teste 3: Devolução Sem Atraso}{16}{subsection.9.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.4}Teste 4: Devolução Com Atraso (Multa Automática)}{17}{subsection.9.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.5}Profiling de Performance}{17}{subsection.9.5}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Tempos de execução medidos durante os testes}}{18}{table.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {10}Considerações Finais}{19}{section.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.1}Destaques Técnicos}{19}{subsection.10.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.2}Métricas da Implantação}{19}{subsection.10.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces Métricas oficiais da implantação do sistema}}{19}{table.9}\protected@file@percent }
+\gdef \@abspage@last{21}

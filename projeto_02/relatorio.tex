@@ -1,5 +1,9 @@
 \documentclass[12pt, a4paper]{article}
 
+% IMPORTANTE: Compile DUAS vezes para gerar o sumário corretamente
+% Primeira compilação: gera o arquivo .toc
+% Segunda compilação: insere o sumário no documento
+
 % --- Pacotes Fundamentais ---
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -12,6 +16,7 @@
 \usepackage{float}
 \usepackage{listings}
 \usepackage{indentfirst}
+\usepackage{amssymb} % Para comando \checkmark
 
 % --- Fonte e Estilo ---
 \usepackage{helvet}
@@ -92,7 +97,8 @@
 
     \begin{tabular}{|l|l|}
         \hline
-        \textbf{Disciplina:} & Banco de Dados 2 \\ \hline
+        \textbf{Disciplina:} & Banco de Dados II \\
+                             & Prof. Argemiro Pentian \\ \hline
         \textbf{Autores:} & Gabriel Coelho Soares \\
                           & Thaito Gabriel Batalini \\ \hline
         \textbf{Curso:} & Análise e Desenvolvimento de Sistemas \\ \hline
@@ -102,23 +108,13 @@
 
     \vspace{2cm}
 
-    \begin{center}
-    \colorbox{successGreen!20}{
-        \begin{minipage}{0.8\textwidth}
-        \centering
-        \textcolor{successGreen}{\textbf{✓ Sistema Implantado com Sucesso}}\\
-        \small{12 Tabelas | 6 Views | 4 Procedures | 8 Triggers}\\
-        \small{186 Registros Inseridos | 47 Índices Criados}
-        \end{minipage}
-    }
-    \end{center}
-
     \vfill
     \textbf{Mogi Guaçu - SP}\\
     2025
 \end{titlepage}
 
 % ================= SUMÁRIO =================
+\newpage
 \tableofcontents
 \newpage
 
@@ -141,19 +137,6 @@ O sistema cobre os seguintes processos de negócio:
     \item Auditoria de alterações cadastrais.
 \end{itemize}
 
-\subsection{Metodologia de Implementação}
-O projeto seguiu uma abordagem modular, com scripts SQL organizados em 7 arquivos independentes e sequenciais:
-
-\begin{enumerate}
-    \item \texttt{01\_biblioteca\_ddl.sql} - Criação das estruturas (DDL)
-    \item \texttt{02\_biblioteca\_dml.sql} - Carga de dados iniciais (DML)
-    \item \texttt{03\_biblioteca\_procedures.sql} - Lógica de negócio
-    \item \texttt{04\_biblioteca\_triggers.sql} - Gatilhos automáticos
-    \item \texttt{05\_biblioteca\_views.sql} - Camadas de abstração
-    \item \texttt{06\_biblioteca\_queries.sql} - Consultas analíticas
-    \item \texttt{07\_biblioteca\_testes.sql} - Testes e otimização
-\end{enumerate}
-
 \newpage
 
 \section{Implantação: Dados Oficiais da Execução}
@@ -171,30 +154,30 @@ A fase de inserção de dados (\texttt{02\_biblioteca\_dml.sql}) processou com s
 \rowcolor{headerBlue}
 \textcolor{white}{\textbf{Tabela}} & \textcolor{white}{\textbf{Registros}} & \textcolor{white}{\textbf{Tempo (s)}} & \textcolor{white}{\textbf{Status}} \\
 \hline
-Categorias & 10 & 0.039 & \textcolor{successGreen}{✓ OK} \\
+Categorias & 10 & 0.039 & \textcolor{successGreen}{\checkmark{} OK} \\
 \hline
-Editoras & 8 & 0.001 & \textcolor{successGreen}{✓ OK} \\
+Editoras & 8 & 0.001 & \textcolor{successGreen}{\checkmark{} OK} \\
 \hline
-Autores & 20 & 0.001 & \textcolor{successGreen}{✓ OK} \\
+Autores & 20 & 0.001 & \textcolor{successGreen}{\checkmark{} OK} \\
 \hline
-TiposUsuario & 4 & 0.001 & \textcolor{successGreen}{✓ OK} \\
+TiposUsuario & 4 & 0.001 & \textcolor{successGreen}{\checkmark{} OK} \\
 \hline
-Livros & 30 & 0.002 & \textcolor{successGreen}{✓ OK} \\
+Livros & 30 & 0.002 & \textcolor{successGreen}{\checkmark{} OK} \\
 \hline
-LivrosAutores & 38 & 0.001 & \textcolor{successGreen}{✓ OK} \\
+LivrosAutores & 38 & 0.001 & \textcolor{successGreen}{\checkmark{} OK} \\
 \hline
-Usuarios & 25 & 0.002 & \textcolor{successGreen}{✓ OK} \\
+Usuarios & 25 & 0.002 & \textcolor{successGreen}{\checkmark{} OK} \\
 \hline
-Exemplares & 50 & 0.001 & \textcolor{successGreen}{✓ OK} \\
+Exemplares & 50 & 0.001 & \textcolor{successGreen}{\checkmark{} OK} \\
 \hline
-Emprestimos & 30 & 0.001 & \textcolor{successGreen}{✓ OK} \\
+Emprestimos & 30 & 0.001 & \textcolor{successGreen}{\checkmark{} OK} \\
 \hline
-Multas & 8 & 0.001 & \textcolor{successGreen}{✓ OK} \\
+Multas & 8 & 0.001 & \textcolor{successGreen}{\checkmark{} OK} \\
 \hline
-Reservas & 5 & 0.001 & \textcolor{successGreen}{✓ OK} \\
+Reservas & 5 & 0.001 & \textcolor{successGreen}{\checkmark{} OK} \\
 \hline
 \rowcolor{rowGray}
-\textbf{TOTAL} & \textbf{186} & \textbf{0.051} & \textcolor{successGreen}{\textbf{✓ SUCESSO}} \\
+\textbf{TOTAL} & \textbf{186} & \textbf{0.051} & \textcolor{successGreen}{\textbf{\checkmark{} SUCESSO}} \\
 \hline
 \end{tabular}
 \caption{Resultado da carga de dados inicial - 100\% de sucesso sem duplicatas}
@@ -482,22 +465,217 @@ As 6 views criadas simplificam o acesso aos dados e encapsulam consultas complex
 
 \newpage
 
+\section{Consultas Avançadas (Outputs Reais)}
+
+As consultas do arquivo \texttt{06\_biblioteca\_queries.sql} foram executadas com sucesso. Abaixo apresentamos alguns resultados relevantes extraídos diretamente do log de implantação.
+
+\subsection{Ranking de Livros Mais Emprestados}
+
+Query utilizando variáveis de sessão para criar ranking dos livros mais populares nos últimos 3 meses:
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|c|l|l|c|}
+\hline
+\rowcolor{headerBlue}
+\textcolor{white}{\textbf{Rank}} & \textcolor{white}{\textbf{Título}} & \textcolor{white}{\textbf{Categoria}} & \textcolor{white}{\textbf{Empréstimos}} \\
+\hline
+1 & Código Limpo & Tecnologia e Computação & 4 \\
+\hline
+2 & Sapiens: Uma Breve História... & História & 3 \\
+\hline
+3 & Refatoração & Tecnologia e Computação & 3 \\
+\hline
+4 & O Alquimista & Romance & 2 \\
+\hline
+5 & 1984 & Ficção Científica & 2 \\
+\hline
+\end{tabular}
+\caption{Top 5 livros mais emprestados - Query 10}
+\end{table}
+
+\subsection{Autores com Múltiplas Obras}
+
+Consulta identificando autores prolíficos no acervo:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\rowcolor{headerBlue}
+\textcolor{white}{\textbf{Autor}} & \textcolor{white}{\textbf{Total de Livros}} \\
+\hline
+Martin Fowler & 4 \\
+\hline
+Robert C. Martin & 4 \\
+\hline
+Yuval Noah Harari & 3 \\
+\hline
+Eric Evans & 3 \\
+\hline
+Stephen Hawking & 2 \\
+\hline
+Kent Beck & 2 \\
+\hline
+Paulo Coelho & 2 \\
+\hline
+\end{tabular}
+\caption{Autores com 2 ou mais livros no acervo - Query 4}
+\end{table}
+
+\subsection{Usuários Sem Empréstimos (Anti-Join)}
+
+Consulta utilizando \texttt{NOT EXISTS} para identificar usuários inativos:
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|l|l|}
+\hline
+\rowcolor{headerBlue}
+\textcolor{white}{\textbf{Nome Completo}} & \textcolor{white}{\textbf{Email}} \\
+\hline
+Bruno Oliveira Castro & bruno.castro@email.com \\
+\hline
+Diego Souza Araújo & diego.araujo@email.com \\
+\hline
+Gabriela Ferreira Cunha & gabriela.cunha@email.com \\
+\hline
+Gustavo Santos Dias & gustavo.dias@email.com \\
+\hline
+Patricia Lima Cardoso & patricia.cardoso@email.com \\
+\hline
+Rafael Oliveira Barbosa & rafael.barbosa@email.com \\
+\hline
+Rodrigo Almeida Pinto & rodrigo.pinto@email.com \\
+\hline
+Tatiana Costa Moreira & tatiana.moreira@email.com \\
+\hline
+Thiago Alves Monteiro & thiago.monteiro@email.com \\
+\hline
+\end{tabular}
+\caption{9 usuários cadastrados que nunca realizaram empréstimos - Query 8}
+\end{table}
+
+\newpage
+
 \section{Testes e Validação}
 
-\subsection{Cenário de Concorrência Testado}
+Os testes do arquivo \texttt{07\_biblioteca\_testes.sql} validaram todas as regras de negócio implementadas. Abaixo apresentamos os resultados reais obtidos durante a execução.
 
-Foi simulado um cenário onde dois bibliotecários tentam emprestar o mesmo exemplar simultaneamente:
+\subsection{Teste 1: Bloqueio por Multas Pendentes}
 
-\textbf{Sessão 1:}
+Tentativa de empréstimo por usuário com multas:
+
 \begin{lstlisting}
-START TRANSACTION;
-SELECT status FROM Exemplares WHERE id_exemplar = 12;
-SELECT SLEEP(5);
-CALL sp_RealizarEmprestimo(4, 12, @s1, @m1);
-COMMIT;
+CALL sp_RealizarEmprestimo(1, 10, @sucesso, @mensagem);
+SELECT @sucesso AS Sucesso, @mensagem AS Mensagem;
 \end{lstlisting}
 
-\textbf{Resultado:} O mecanismo de locks do InnoDB garantiu que apenas a primeira transação fosse efetivada. A segunda recebeu: \textit{``Exemplar nao disponivel''}.
+\textbf{Resultado obtido:}
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|l|}
+\hline
+\rowcolor{headerBlue}
+\textcolor{white}{\textbf{Sucesso}} & \textcolor{white}{\textbf{Mensagem}} \\
+\hline
+0 & Usuário possui multas pendentes \\
+\hline
+\end{tabular}
+\end{table}
+
+\textcolor{successGreen}{$\checkmark{}$ \textbf{PASSOU}} - Sistema bloqueou corretamente o empréstimo.
+
+\subsection{Teste 2: Exemplar Não Disponível}
+
+Tentativa de empréstimo de exemplar em manutenção:
+
+\begin{lstlisting}
+UPDATE Exemplares SET status = 'Manutencao' WHERE id_exemplar = 29;
+CALL sp_RealizarEmprestimo(2, 29, @sucesso, @mensagem);
+\end{lstlisting}
+
+\textbf{Resultado obtido:}
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|l|}
+\hline
+\rowcolor{headerBlue}
+\textcolor{white}{\textbf{Sucesso}} & \textcolor{white}{\textbf{Mensagem}} \\
+\hline
+0 & Exemplar não está disponível \\
+\hline
+\end{tabular}
+\end{table}
+
+\textcolor{successGreen}{$\checkmark{}$ \textbf{PASSOU}} - Sistema validou status do exemplar.
+
+\subsection{Teste 3: Devolução Sem Atraso}
+
+Empréstimo e devolução imediata (sem multa):
+
+\begin{lstlisting}
+CALL sp_RealizarEmprestimo(5, 22, @s, @m);
+SET @id_emp = LAST_INSERT_ID();
+CALL sp_RealizarDevolucao(@id_emp, @sucesso, @multa, @mensagem);
+\end{lstlisting}
+
+\textbf{Resultado obtido:}
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|l|}
+\hline
+\rowcolor{headerBlue}
+\textcolor{white}{\textbf{Sucesso}} & \textcolor{white}{\textbf{Multa}} & \textcolor{white}{\textbf{Mensagem}} \\
+\hline
+1 & R\$ 0.00 & Devolução realizada sem atraso \\
+\hline
+\end{tabular}
+\end{table}
+
+\textcolor{successGreen}{$\checkmark{}$ \textbf{PASSOU}} - Devolução processada sem multa.
+
+\subsection{Teste 4: Devolução Com Atraso (Multa Automática)}
+
+Empréstimo com 5 dias de atraso:
+
+\begin{lstlisting}
+-- Emprestimo com 20 dias atras, vencido ha 5 dias
+INSERT INTO Emprestimos (...) VALUES
+    (7, 24, DATE_SUB(NOW(), INTERVAL 20 DAY),
+     DATE_SUB(CURDATE(), INTERVAL 5 DAY), 'Ativo');
+CALL sp_RealizarDevolucao(@id_emp_atrasado, @sucesso, @multa, @mensagem);
+\end{lstlisting}
+
+\textbf{Resultado obtido:}
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|l|}
+\hline
+\rowcolor{headerBlue}
+\textcolor{white}{\textbf{Sucesso}} & \textcolor{white}{\textbf{Multa}} & \textcolor{white}{\textbf{Mensagem}} \\
+\hline
+1 & R\$ 10.00 & Devolução com atraso. Multa: R\$ 10.00... \\
+\hline
+\end{tabular}
+\end{table}
+
+\textbf{Verificação da multa gerada:}
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|l|}
+\hline
+\rowcolor{headerBlue}
+\textcolor{white}{\textbf{ID}} & \textcolor{white}{\textbf{Valor}} & \textcolor{white}{\textbf{Dias}} & \textcolor{white}{\textbf{Status}} \\
+\hline
+9 & R\$ 10.00 & 5 & Pendente \\
+\hline
+\end{tabular}
+\end{table}
+
+\textcolor{successGreen}{$\checkmark{}$ \textbf{PASSOU}} - Multa calculada corretamente (5 dias $\times$ R\$ 2.00 = R\$ 10.00).
 
 \subsection{Profiling de Performance}
 
@@ -565,26 +743,14 @@ Objetos de banco criados & 30 \\
 \caption{Métricas oficiais da implantação do sistema}
 \end{table}
 
-\subsection{Próximos Passos}
-
-O projeto encontra-se em estágio de \textit{Release Candidate}, com todos os scripts testados e validados. Os próximos passos incluem:
-
-\begin{enumerate}
-    \item Implantação em ambiente de homologação
-    \item Testes de carga com volume real de dados
-    \item Integração com interface web/mobile
-    \item Configuração de backups automáticos
-    \item Monitoramento de performance em produção
-\end{enumerate}
-
 \vspace{2cm}
 
 \begin{center}
     \rule{10cm}{0.4pt} \\[0.3cm]
     \textbf{Gabriel Coelho Soares} \\
-    \small{Desenvolvedor Principal / DBA} \\[0.5cm]
+    \small{Aluno} \\[0.5cm]
     \textbf{Thaito Gabriel Batalini} \\
-    \small{Colaborador Técnico}
+    \small{aluno}
 \end{center}
 
 \vspace{1cm}
